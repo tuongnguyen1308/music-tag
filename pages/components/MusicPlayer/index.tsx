@@ -1,9 +1,11 @@
 import { ChangeEvent, FC, useRef, useState } from "react";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Tooltip, { tooltipClasses, TooltipProps } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import Tooltip, { tooltipClasses, TooltipProps } from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
 import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -14,10 +16,8 @@ import FastForwardRounded from "@mui/icons-material/FastForwardRounded";
 import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import PauseRounded from "@mui/icons-material/PauseRounded";
-import { toBlob } from "html-to-image";
+import { toPng } from "html-to-image";
 import saveAs from "file-saver";
-import TextField from "@mui/material/TextField";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 type SongInfoProps = {
   name: string;
@@ -103,6 +103,7 @@ const MusicPlayer: FC = () => {
   const [position, setPosition] = useState(60 + 8);
   const [paused, setPaused] = useState(false);
   const [song, setSong] = useState(defaultSong);
+  const [resultPNG, setResultPNG] = useState<string>();
   const [durationInput, setDurationInput] = useState<string>(
     formatDuration(defaultSong.duration)
   );
@@ -111,8 +112,15 @@ const MusicPlayer: FC = () => {
 
   const handleDownload = () => {
     if (imageRef.current != null)
-      toBlob(imageRef.current as HTMLElement).then((blob) => {
-        saveAs(blob as Blob, "music-tag.png");
+      toPng(imageRef.current as HTMLElement).then((dataURL) => {
+        saveAs(dataURL, "music-tag.png");
+      });
+  };
+
+  const handleGenerate = () => {
+    if (imageRef.current != null)
+      toPng(imageRef.current as HTMLElement).then((dataURL) => {
+        setResultPNG(dataURL);
       });
   };
 
@@ -261,12 +269,7 @@ const MusicPlayer: FC = () => {
               </TinyText>
             </LightTooltip>
           </Stack>
-          <Stack
-            alignContent="center"
-            justifyContent="center"
-            direction="row"
-            mt={-1}
-          >
+          <Stack alignContent="center" justifyContent="center" direction="row">
             <IconButton aria-label="previous song">
               <FastRewindRounded fontSize="large" htmlColor="black" />
             </IconButton>
@@ -290,6 +293,10 @@ const MusicPlayer: FC = () => {
       <Button onClick={handleDownload} endIcon={<ArrowCircleDownIcon />}>
         Download Transparent Image
       </Button>
+      <Button onClick={handleGenerate} endIcon={<ArrowCircleDownIcon />}>
+        Generate PNG
+      </Button>
+      {resultPNG && <Image src={resultPNG} height={228} width={400} />}
     </Stack>
   );
 };
