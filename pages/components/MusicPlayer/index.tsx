@@ -94,7 +94,7 @@ const formatDuration = (value: number) => {
   return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
 };
 
-const validInput = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":"];
+const validInput = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 const MusicPlayer: FC = () => {
   const imageRef = useRef(null);
