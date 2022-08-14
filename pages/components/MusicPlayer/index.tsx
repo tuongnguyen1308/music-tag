@@ -193,12 +193,11 @@ const MusicPlayer: FC = () => {
                   onChange={handleImageChange}
                   hidden
                 />
-                <Image
-                  className="rounded"
+                <img
+                  className="rounded fit-cover"
                   src={song.image}
                   width={100}
                   height={100}
-                  objectFit="cover"
                   alt={song.alt}
                 />
               </label>
@@ -296,7 +295,9 @@ const MusicPlayer: FC = () => {
       <Button onClick={handleGenerate} endIcon={<ArrowCircleDownIcon />}>
         Generate PNG
       </Button>
-      {resultPNG && <Image src={resultPNG} height={228} width={400} />}
+      {resultPNG && (
+        <Image src={resultPNG} height={228} width={400} alt="Preview image" />
+      )}
     </Stack>
   );
 };
