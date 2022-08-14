@@ -103,7 +103,6 @@ const MusicPlayer: FC = () => {
   const [position, setPosition] = useState(60 + 8);
   const [paused, setPaused] = useState(false);
   const [song, setSong] = useState(defaultSong);
-  const [resultPNG, setResultPNG] = useState<string>();
   const [durationInput, setDurationInput] = useState<string>(
     formatDuration(defaultSong.duration)
   );
@@ -114,13 +113,6 @@ const MusicPlayer: FC = () => {
     if (imageRef.current != null)
       toPng(imageRef.current as HTMLElement).then((dataURL) => {
         saveAs(dataURL, "music-tag.png");
-      });
-  };
-
-  const handleGenerate = () => {
-    if (imageRef.current != null)
-      toPng(imageRef.current as HTMLElement).then((dataURL) => {
-        setResultPNG(dataURL);
       });
   };
 
@@ -292,12 +284,6 @@ const MusicPlayer: FC = () => {
       <Button onClick={handleDownload} endIcon={<ArrowCircleDownIcon />}>
         Download Transparent Image
       </Button>
-      <Button onClick={handleGenerate} endIcon={<ArrowCircleDownIcon />}>
-        Generate PNG
-      </Button>
-      {resultPNG && (
-        <Image src={resultPNG} height={228} width={400} alt="Preview image" />
-      )}
     </Stack>
   );
 };
