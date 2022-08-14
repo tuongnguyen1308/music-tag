@@ -13,14 +13,20 @@ a {
 
 * {
   box-sizing: border-box;
+  outline: none;
+  &:hover {
+    outline: none;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.box-shadow {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
