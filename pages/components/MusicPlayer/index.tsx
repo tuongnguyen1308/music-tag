@@ -22,9 +22,10 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 type SongInfoProps = {
   name: string;
   singer: string;
-  album: string;
+  album?: string;
   image: string;
   duration: number;
+  alt?: string;
 };
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -86,6 +87,7 @@ const defaultSong: SongInfoProps = {
   album: "Single",
   image: "/images/songs/tungayemden.jpg",
   duration: 4 * 60 + 30,
+  alt: "song-image",
 };
 
 const formatDuration = (value: number) => {
@@ -142,7 +144,13 @@ const MusicPlayer: FC = () => {
   const handleChangeDurationInput = ({
     target: { value },
   }: ChangeEvent<HTMLInputElement>) => {
-    const invalid = value.split("").some((char) => !validInput.includes(char));
+    const invalid =
+      value
+        .split("")
+        .filter((char) => char != ":")
+        .some((char) => !validInput.includes(char)) ||
+      value.split(":").length > 2 ||
+      value === ":";
     if (invalid) return;
     if (value.length == 2 && !value.includes(":"))
       setDurationInput(value + ":");
@@ -183,6 +191,7 @@ const MusicPlayer: FC = () => {
                   width={100}
                   height={100}
                   objectFit="cover"
+                  alt={song.alt}
                 />
               </label>
             </Tooltip>
